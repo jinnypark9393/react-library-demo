@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useBooks, useSearchBooks } from '../hooks/useBooks'; // useInfiniteBooks 대신 useBooks 임포트
+import { CircularProgress, Box } from '@mui/material'; // CircularProgress, Box 임포트 추가
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,7 +32,13 @@ const Home = () => {
   };
 
   // 초기 로딩 상태 처리
-  if (isLoadingBooks && !query) return <div>도서 목록을 불러오는 중...</div>;
+  if (isLoadingBooks && !query) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   if (isErrorBooks && !query) return <div>오류 발생: {errorBooks.message}</div>;
 
   // 검색 결과 또는 초기 도서 목록 렌더링
@@ -79,7 +86,12 @@ const Home = () => {
         )}
       </form>
 
-      {isLoadingSearch && <div>검색 결과를 불러오는 중...</div>}
+      {/* 로딩 스피너 표시 */} 
+      {isLoadingSearch && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}> {/* 중앙 정렬 및 마진 추가 */} 
+          <CircularProgress />
+        </Box>
+      )}
       {isErrorSearch && <div>검색 오류: {errorSearch.message}</div>}
 
       <h2>{listTitle}</h2>
